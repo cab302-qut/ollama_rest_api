@@ -10,15 +10,15 @@ public class DescribeImage {
         String model = "llava";
         String prompt = "describe the image as accurately as you can, if the image contains text transcribe whatever is intelligible";
 
-        String image1 = "./src/main/resources/image1.jpg";
-        String image2 = "./src/main/resources/image2.jpg";
-        String image3 = "./src/main/resources/image3.jpg";
-        String image4 = "./src/main/resources/image4.jpg";
+//        String image = "./src/main/resources/image1.jpg";
+//        String image = "./src/main/resources/image2.jpg";
+        String image = "./src/main/resources/image3.jpg";
+//        String image = "./src/main/resources/image4.jpg";
 
 
         OllamaResponseFetcher fetcher = new OllamaResponseFetcher(apiURL);
 
-        OllamaResponse response = fetcher.fetchOllamaResponse(model, prompt, image3);
+        OllamaResponse response = fetcher.fetchOllamaResponse(model, prompt, image);
 
         System.out.println("======================================================");
         System.out.print("You asked: ");
