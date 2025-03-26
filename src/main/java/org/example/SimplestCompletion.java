@@ -14,10 +14,12 @@ public class SimplestCompletion {
 
         OllamaResponse response = fetcher.fetchOllamaResponse(model, prompt);
 
+        System.out.println("======================================================");
         System.out.print("You asked: ");
         System.out.println(prompt);
-
+        System.out.println("======================================================");
         System.out.print("Ollama says: ");
         System.out.println(response.response);
+        System.out.println("======================================================");
     }
 }

@@ -10,8 +10,10 @@ public class AsynchronousQuery {
 
         @Override
         public void onResponseReceived(OllamaResponse response) {
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.print("Ollama says: ");
             System.out.println(response.response);
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
     };
 
@@ -24,7 +26,9 @@ public class AsynchronousQuery {
         fetcher.fetchAsynchronousOllamaResponse(model, prompt, new MyResponseListener());
 
         // note that fetcher returns immediately, and the answer is printed by MyResponseListener when a response becomes available
+        System.out.println("======================================================");
         System.out.print("You asked: ");
         System.out.println(prompt);
+        System.out.println("======================================================");
     }
 }
