@@ -27,10 +27,7 @@ SOFTWARE.
 
 package org.example.ollama;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -62,24 +59,12 @@ public class OllamaResponseFetcher {
         return conn;
     }
 
-    public OllamaResponse fetchOllamaResponse(String model, String prompt) {
-
-        // for documentation on how to format the JSON request https://github.com/ollama/ollama/blob/main/docs/api.md
-        String simpleJsonObj = String.format("""
-                {
-                  "model": "%s",
-                  "prompt": "%s",
-                  "stream": false
-                }
-                """, model, prompt);
-
+    private OllamaResponse fetchOllamaResponse(String simpleJsonObj) {
         HttpURLConnection conn = null;
         String output = null;
         OutputStream os = null;
 
-
-        try
-        {
+        try {
             logger.info("Attempting POST on " + apiURL);
 
             conn = getConnection();
@@ -97,14 +82,11 @@ public class OllamaResponseFetcher {
             int code = conn.getResponseCode();
             logger.info("Response: " + code);
 
-            if(code == HttpURLConnection.HTTP_OK)
-            {
+            if(code == HttpURLConnection.HTTP_OK) {
                 output = readConnInput(conn);
                 response = OllamaResponse.fromJson(output);
-
             }
-        }
-        catch(Exception ex) {
+        } catch(Exception ex) {
             logger.log(Level.WARNING,"Error performing POST",ex);
         } finally {
             if(os != null) {
@@ -114,6 +96,45 @@ public class OllamaResponseFetcher {
             }
         }
         return response;
+    }
+
+    public OllamaResponse fetchOllamaResponse(String model, String prompt) {
+
+        // tested with model llama v3.2 -for documentation on how to format the JSON request https://github.com/ollama/ollama/blob/main/docs/api.md
+        String simpleJsonObj = String.format("""
+                {
+                  "model": "%s",
+                  "prompt": "%s",
+                  "stream": false
+                }
+                """, model, prompt);
+        return fetchOllamaResponse(simpleJsonObj);
+    }
+
+    public OllamaResponse fetchOllamaResponse(String model, String prompt, String image) {
+    // tested with model llava v1.6 - for documentation on how to format the JSON request https://ollama.com/library/llava
+
+        String imageContents = JollamaImageUtil.imageToBase64(image);
+        String simpleJsonObj = String.format("""
+                {
+                  "model": "%s",
+                  "prompt": "%s",
+                  "stream": false,
+                  "images": ["%s"]
+                }
+               """, model, prompt, imageContents);
+
+        return fetchOllamaResponse(simpleJsonObj);
+    }
+
+    public void fetchAsynchronousOllamaResponse(String model, String prompt, ResponseListener responseListener) {
+        Thread thread = new Thread(){
+            public void run(){
+                OllamaResponse response = fetchOllamaResponse(model, prompt);
+                responseListener.onResponseReceived(response);
+            }
+        };
+        thread.start();
     }
 
     protected String readConnInput(HttpURLConnection conn) {
@@ -144,5 +165,6 @@ public class OllamaResponseFetcher {
 
         return sb.toString();
     }
+
 
 }
