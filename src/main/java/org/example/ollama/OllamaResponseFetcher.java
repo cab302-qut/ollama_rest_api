@@ -40,10 +40,9 @@ public class OllamaResponseFetcher {
     private static final String USERAGENT = "OLLAMA FETCHER";
     public static final Logger logger = Logger.getLogger(OllamaResponseFetcher.class.getName());
     private final String apiURL;
-    public OllamaResponse response = new OllamaResponse();
 
     public OllamaResponseFetcher(String apiURL) {
-        this.apiURL = apiURL; 
+        this.apiURL = apiURL;
     }
 
     protected HttpURLConnection getConnection() {
@@ -63,6 +62,7 @@ public class OllamaResponseFetcher {
         HttpURLConnection conn = null;
         String output = null;
         OutputStream os = null;
+        OllamaResponse response = null;
 
         try {
             logger.info("Attempting POST on " + apiURL);

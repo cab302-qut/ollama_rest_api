@@ -19,7 +19,7 @@ public class SimplestCompletion {
         System.out.println(prompt);
         System.out.println("======================================================");
         System.out.print("Ollama says: ");
-        System.out.println(response.response);
+        System.out.println(response.getResponse());
         System.out.println("======================================================");
     }
 }

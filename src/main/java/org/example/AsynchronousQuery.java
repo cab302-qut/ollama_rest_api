@@ -12,7 +12,7 @@ public class AsynchronousQuery {
         public void onResponseReceived(OllamaResponse response) {
             System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.print("Ollama says: ");
-            System.out.println(response.response);
+            System.out.println(response.getResponse());
             System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
     };
